@@ -47,6 +47,15 @@ class Currency < DifferentCurrencyCodeError
     end
   end
   
+  # multiplies currency and a float
+  def * obj2
+    if self.currency_id == obj2.currency_id
+      return Currency.new(currency_id,self.amount * obj2.amount)
+    else
+      raise DifferentCurrencyCodeError
+    end
+
+  end
 
 end
 
@@ -55,7 +64,7 @@ begin
   puts currency2 = Currency.new("US", 0.23)
   puts currency1.currency_id == currency2.currency_id
 
-  new_currency = currency2 + currency1
+  new_currency = currency2 * currency1
   puts new_currency
 rescue
   puts "You fucked up"
