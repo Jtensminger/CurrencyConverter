@@ -30,8 +30,8 @@ class Currency
 
 end
 
-puts currency1 = Currency.new("US", 1)
+puts currency1 = Currency.new("AUD", 1)
 puts currency2 = Currency.new("US", 0.23)
-puts currency1.object_id != currency2.object_id
+puts currency1.currency_id == currency2.currency_id
 new_currency = currency1 + currency2
 puts new_currency
