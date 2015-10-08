@@ -1,6 +1,7 @@
 require 'pry'
+require_relative 'DifferentCurrencyCodeError'
 
-class Currency
+class Currency < DifferentCurrencyCodeError
   
   attr_accessor :currency_id, :amount
 
@@ -16,7 +17,11 @@ class Currency
 
   # compares two currency objects
   def <=> currency
-    self.currency_id == currency.currency_id
+    if self.currency_id == currency.currency_id
+      true
+    else
+      raise DifferentCurrencyCodeError
+    end
   end
 
   # adds two currency amounts together
@@ -24,29 +29,36 @@ class Currency
     if self.currency_id == obj2.currency_id
       return Currency.new(currency_id,self.amount + obj2.amount)
     else
-      "Two currency's are not the same"
+      raise DifferentCurrencyCodeError
     end
   end
 
-  
+  # subtracts two currency amounts
   def - obj2
-    if self.currency_id == obj2.currency_id
+    if self.currency_id == obj2.currency_id # checks if currency are the same
+      # Checks for Negative Currency
       if (self.amount - obj2.amount >= 0) && (obj2.amount - self.amount >= 0)
         return Currency.new(currency_id,self.amount - obj2.amount)
       else
         "You can not have negative currency."
       end
     else
-      "Two currency's are not the same."
+      raise DifferentCurrencyCodeError
     end
   end
   
 
 end
 
-puts currency1 = Currency.new("US", 1)
-puts currency2 = Currency.new("US", 0.23)
-puts currency1.currency_id == currency2.currency_id
-new_currency = currency2 - currency1
+begin
+  puts currency1 = Currency.new("US", 1)
+  puts currency2 = Currency.new("US", 0.23)
+  puts currency1.currency_id == currency2.currency_id
 
-puts new_currency
+  new_currency = currency2 + currency1
+  puts new_currency
+rescue
+  puts "You fucked up"
+end
+
+
