@@ -8,5 +8,16 @@ class Currency
     @currency_id = currency_id
     @amount = amount
   end
-  
+
+  def to_s
+    "#{currency_id}: #{amount}"
+  end
+
+  def <=> currency
+    self.currency_id == currency.currency_id
+  end
+
+
 end
+
+puts Currency.new("US", 1).to_s
