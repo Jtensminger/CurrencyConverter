@@ -3,13 +3,21 @@ require_relative 'DifferentCurrencyCodeError'
 
 class Currency < DifferentCurrencyCodeError
   
-  attr_accessor :currency_id, :amount
+  attr_accessor :currency_id, :amount, :currency_symbol, :amount_convert
 
-  def initialize currency_id, amount
+  CURRENCY = {
+    "$" => {symbol: "USD", rate: 1.0},
+    "€" => {symbol: "EUR", rate: 1.02}
+  }
+
+
+  def initialize currency_id, amount = 0
+    if  
+    @currency_symbol = currency_id[/\A\W/]
     @currency_id = currency_id
-    @amount = amount
+    @amount = currency_id[/\d\W\d{2}/]
   end
-
+  
   # displays the contents of currency objects
   def to_s
     "#{currency_id}: #{amount.to_f}"
@@ -18,9 +26,9 @@ class Currency < DifferentCurrencyCodeError
   # compares two currency objects
   def <=> currency
     if self.currency_id == currency.currency_id
-      true
+      self.amount <=> currency.amount
     else
-      raise DifferentCurrencyCodeError
+      self.currency_id <=> currency.currency_id
     end
   end
 
@@ -60,13 +68,17 @@ class Currency < DifferentCurrencyCodeError
 end
 
 begin
-  puts currency1 = Currency.new("US", 1)
-  puts currency2 = Currency.new("US", 0.23)
-  puts currency1.currency_id == currency2.currency_id
+  currency1 = Currency.new("USD", 1)
+  currency2 = Currency.new("USD", 0.23)
+  currency3 = Currency.new("$1.00")
+  #puts currency1.currency_id == currency2.currency_id
+  #puts currency3.currency_id
+  #puts currency3.amount
+  #puts currency3.currency_symbol
+ # new_currency = currency2 * currency1
+  #puts new_currency
 
-  new_currency = currency2 * currency1
-  puts new_currency
-rescue
+rescue DifferentCurrencyCodeError
   puts "You fucked up"
 end
 
