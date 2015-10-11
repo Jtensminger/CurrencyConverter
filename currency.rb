@@ -5,17 +5,16 @@ class Currency < DifferentCurrencyCodeError
   
   attr_accessor :currency_id, :amount, :currency_symbol, :amount_convert
 
-  CURRENCY = {
-    "$" => {symbol: "USD", rate: 1.0},
-    "€" => {symbol: "EUR", rate: 1.02}
-  }
-
 
   def initialize currency_id, amount = 0
-    if  
-    @currency_symbol = currency_id[/\A\W/]
-    @currency_id = currency_id
-    @amount = currency_id[/\d\W\d{2}/]
+    if amount == 0
+      @amount = currency_id[/\d\W\d{2}/]
+      @currency_symbol = currency_id[/^\W/]
+      binding.pry
+    else
+      @currency_id = currency_id
+      @amount = amount
+    end
   end
   
   # displays the contents of currency objects
@@ -69,8 +68,6 @@ end
 
 begin
   currency1 = Currency.new("USD", 1)
-  currency2 = Currency.new("USD", 0.23)
-  currency3 = Currency.new("$1.00")
   #puts currency1.currency_id == currency2.currency_id
   #puts currency3.currency_id
   #puts currency3.amount
